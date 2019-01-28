@@ -20,17 +20,10 @@ The Tidyverse is a collection of libraries that incudes all of the libraries tha
 library(tidyverse)
 ```
 
-This is a good time to set wd:
-```{r}
-setwd("C:/Users/jack.kennesion/Data-Fellowship/Clustering/Project")
-```
-
-
-
 # 3. Load Data
 
 ```{r}
-ruth <- read.csv("Data2.csv")
+ruth <- read.csv("Data.csv")
 
 head(ruth)
 
