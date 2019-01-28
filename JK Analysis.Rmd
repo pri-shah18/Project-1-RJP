@@ -1,0 +1,87 @@
+---
+title: "Fuel vs Tyre Analysis"
+output: html_notebook
+---
+
+#1. Overview
+This notebook uses k-means clustering to group fuel usage to tire spend.
+
+Problem Statement for Project-1-RJP
+For a medium sized fleet of a grounds maintenance company there is a robust methodology in use for creating a fuel use projection for the coming year. However tyre costs fluctuate and previous budget projections have been inaccurate.
+“Can we use clustering to provide a model of a relationship between fuel costs and tyre costs for the previous year, which could be used to improve the budget projection for future tyre costs?”
+For this exercise solely focus on fuel cost and tyre cost relationship
+
+#2. Load libraries
+The Tidyverse is a collection of libraries that incudes all of the libraries that are required to complete this analysis
+
+```{r}
+# install.packages("tidyverse")
+
+library(tidyverse)
+```
+
+This is a good time to set wd:
+```{r}
+setwd("C:/Users/jack.kennesion/Data-Fellowship/Clustering/Project")
+```
+
+
+
+# 3. Load Data
+
+```{r}
+ruth <- read.csv("Data2.csv")
+
+head(ruth)
+
+```
+
+# 4. Explore and tansform data
+
+Change titles
+```{r}
+names(ruth) <- c("Reg","Fuel","Tyre")
+
+head(ruth)
+
+```
+# 5.Visualise data
+```{r}
+qplot(x = ruth$Fuel, y = ruth$Tyre,)
+```
+# 6. fine tuning kmeans
+```{r}
+kclustermax <- 10
+wss <- sapply(1:kclustermax, function(k){kmeans(ruth[c("Fuel","Tyre")],k)$tot.withinss})
+
+plot(1:kclustermax,wss, type="b", pch = 21, frame = FALSE, xlab="Number of clusters K", ylab = "Total Within Clusters sum of Squares")
+```
+
+# 7. Modelling (cllustering)
+
+```{r}
+# guess that out dataset has 3 clusers
+
+kclusters <- 5
+
+kmeansresult <- kmeans(ruth[c("Fuel","Tyre")], centers = kclusters)
+
+#increase number of colu mns in c notation for increased variables
+
+ruth$Cluster <- kmeansresult$cluster
+
+ruth$Cluster <- as.factor(ruth$Cluster)
+
+head(ruth)
+
+ggplot(ruth, aes(x = ruth$Fuel, y = ruth$Tyre)) + geom_point(aes(colour = ruth$Cluster))
+
+qplot(x = ruth$Tyre, y = ruth$Fuel, color = ruth$Cluster)
+
+```
+
+#8. Show K Means Values
+
+```{r}
+print(kmeansresult)
+```
