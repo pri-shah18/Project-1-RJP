@@ -34,18 +34,29 @@ head(ruth)
 Change titles
 ```{r}
 names(ruth) <- c("Reg","Fuel","Tyre")
+#Create DataFrame with only 2 numeric columns
 
-head(ruth)
+ruth2 <-(ruth[ , c("Fuel","Tyre")])
+
+#scale the data to make a more sensible output, not skewed by one variable
+
+ruth2 <-scale(ruth2)  
+
+#make this scaled matrix into a dataframe again
+
+ruth3 <- as.data.frame(ruth2)
+
+head(ruth3)
 
 ```
 # 5.Visualise data
 ```{r}
-qplot(x = ruth$Fuel, y = ruth$Tyre,)
+qplot(x = ruth3$Fuel, y = ruth3$Tyre,)
 ```
 # 6. fine tuning kmeans
 ```{r}
 kclustermax <- 10
-wss <- sapply(1:kclustermax, function(k){kmeans(ruth[c("Fuel","Tyre")],k)$tot.withinss})
+wss <- sapply(1:kclustermax, function(k){kmeans(ruth3[c("Fuel","Tyre")],k)$tot.withinss})
 
 plot(1:kclustermax,wss, type="b", pch = 21, frame = FALSE, xlab="Number of clusters K", ylab = "Total Within Clusters sum of Squares")
 ```
@@ -57,19 +68,19 @@ plot(1:kclustermax,wss, type="b", pch = 21, frame = FALSE, xlab="Number of clust
 
 kclusters <- 5
 
-kmeansresult <- kmeans(ruth[c("Fuel","Tyre")], centers = kclusters)
+kmeansresult <- kmeans(ruth3[c("Fuel","Tyre")], centers = kclusters)
 
 #increase number of colu mns in c notation for increased variables
 
-ruth$Cluster <- kmeansresult$cluster
+ruth3$Cluster <- kmeansresult$cluster
 
-ruth$Cluster <- as.factor(ruth$Cluster)
+ruth3$Cluster <- as.factor(ruth3$Cluster)
 
-head(ruth)
+head(ruth3)
 
-ggplot(ruth, aes(x = ruth$Fuel, y = ruth$Tyre)) + geom_point(aes(colour = ruth$Cluster))
+ggplot(ruth3, aes(x = ruth3$Fuel, y = ruth3$Tyre)) + geom_point(aes(colour = ruth3$Cluster))
 
-qplot(x = ruth$Tyre, y = ruth$Fuel, color = ruth$Cluster)
+qplot(x = ruth3$Tyre, y = ruth3$Fuel, color = ruth3$Cluster)
 
 ```
 
