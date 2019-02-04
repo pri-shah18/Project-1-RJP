@@ -64,7 +64,7 @@ plot(1:kclustermax,wss, type="b", pch = 21, frame = FALSE, xlab="Number of clust
 # 7. Modelling (cllustering)
 
 ```{r}
-# guess that out dataset has 3 clusers
+# From The above we can assume our dataset has 5 clusers
 
 kclusters <- 5
 
